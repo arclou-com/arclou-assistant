@@ -16,7 +16,7 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 - Deploy automático em **staging** funcionando, com smoke test verde
 - Infra só muda por Terraform (nada criado à mão no console)
 - Documentação atualizada (README/ADR/OpenAPI e Central de Ajuda, quando a mudança afeta o cliente)
-- Front: igual ao Figma no desktop (1920) e no mobile (430), nos temas Dark e Light
+- Front: **pixel perfect** com o Figma no desktop (1920) e no mobile (430), nos temas Dark e Light, usando os componentes da biblioteca do Figma (node `53:2` do arquivo `PJ7SvIZo5iVL4GqUoT0xAi`). O PR traz print lado a lado (tela × Figma)
 
 ## Pré-requisitos externos (começar JÁ, eles têm lead time)
 | # | Item | Lead time |
@@ -93,7 +93,7 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
-| S1-F01 | Next.js (App Router, TS), tokens do Figma (Dark/Light), fontes e componentes base (botão, input, card, modal, drawer, toast, menu ⋯). Vitest + Testing Library. Cliente gerado do contrato apontando para o mock | frontend | 5 | Componentes iguais ao Figma nos dois temas |
+| S1-F01 | Next.js (App Router, TS), tokens do Figma (Dark/Light), fontes e componentes base a partir da biblioteca do Figma (node `53:2`): botão, field, card, modal, drawer, toast, menu ⋯, badge, sidebar. Vitest + Testing Library + teste visual (Playwright screenshots). Cliente gerado do contrato apontando para o mock | frontend | 5 | Componentes pixel perfect com o Figma nos dois temas (diferença visual ≤ 1%) |
 | S1-F02 | Layout do painel (sidebar fixa, cabeçalho, desktop 1920 com rolagem, mobile 430) e estados de carregamento, vazio e erro (linha "Estados no Dark") | frontend | 5 | Testes de componente |
 | S1-F03 | Login com Firebase Auth (linha "Página de vendas e login"), rotas protegidas e envio do ID token | frontend | 3 | Sem login → redireciona. Token vencido → renova |
 ## Sprint 2 — Gateway WhatsApp e vínculo (16/11 – 27/11)
