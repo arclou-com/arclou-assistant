@@ -17,6 +17,7 @@ Assistente pessoal por assinatura que controla **gastos, agenda e e-mails** do u
 | [10 — Plano Casal e a Casa](docs/10-plano-casal.md) | Guia completo de finanças a dois: 3 modos (Dinheiro junto com conta conjunta, Separado, Misto), gavetas, divisão, quem deve quem, privacidade, convite e saída |
 | [11 — Central de Ajuda](docs/11-central-de-ajuda.md) | Documentação para o cliente (estilo Google Cloud): pontos de entrada, estrutura, mapa artigo × regra, guia de estilo e **regra de manutenção** |
 | [12 — Ambientes e workflow](docs/12-ambientes-e-workflow.md) | Staging e production numa VM do GCE com agenda de liga/desliga, Terraform, branches protegidas, GitHub Project e pipelines |
+| [Sprints](docs/sprints/) | Especificação detalhada de cada sprint (contexto, escopo, critérios de aceite e testes por task). É a fonte do corpo das issues (`scripts/github_backlog.py --sprint N`) |
 
 ## Stack
 Python 3.12 · FastAPI · LangGraph/LangChain · Vertex AI (Gemini) · PostgreSQL + pgvector · Firestore · Redis + arq · Firebase Auth · WhatsApp Cloud API · Next.js · Docker · Caddy · VM no GCE · Terraform · GitHub Actions

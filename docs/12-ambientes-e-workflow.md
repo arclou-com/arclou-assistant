@@ -113,6 +113,7 @@ hotfix/... ── PR → main, depois merge de volta em develop
 | Prioridade | Seleção | P0 · P1 · P2 |
 
 - **Issues:** uma por linha do doc 05 (título `S2-07 · Vínculo do WhatsApp`) com o critério de aceite como checklist. Cada sprint tem uma **issue-épico** com as tasks como sub-issues.
+- **Uma sprint por vez:** as issues de uma sprint só são criadas no planejamento dela, com `python3 scripts/github_backlog.py --sprint N`. Até lá, o backlog futuro fica no doc 05, onde é barato de ajustar.
 - **Views:** *Sprint atual* (board por Status, filtro `sprint:@current`), *Backlog* (tabela agrupada por Sprint, soma de pontos), *Roadmap* (por Sprint) e *Por área*.
 - **Automação:** issue entra como Backlog. Quando o PR é aberto, vai para In Review. Com o merge, vai para Done.
 
