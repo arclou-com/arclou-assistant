@@ -84,7 +84,7 @@ infra/terraform/
     └── production/     # env-services de arclou-prd
 ```
 
-- **State** remoto no GCS (`gs://arclou-tfstate`, versionado), um prefixo por pasta de `envs/`.
+- **State** remoto no GCS (`gs://arclou-prd-tfstate`, versionado), um prefixo por pasta (`bootstrap`, `shared`, `staging`, `production`).
 - **Primeiro apply:** você faz o login no terminal (`gcloud auth login` e `gcloud auth application-default login`) e eu rodo o `bootstrap/`. Depois disso, o GitHub Actions faz os applies via **Workload Identity Federation**, sem chave JSON.
 - Segredos (token da Meta, chaves) entram no Secret Manager por `gcloud secrets versions add`, nunca no código nem no state.
 

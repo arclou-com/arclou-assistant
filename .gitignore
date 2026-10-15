@@ -50,3 +50,6 @@ Thumbs.db
 # Playwright
 test-results/
 playwright-report/
+
+# IDs da organização e do billing (repo público)
+infra/terraform/**/terraform.tfvars
