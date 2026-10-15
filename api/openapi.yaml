@@ -1703,9 +1703,9 @@ paths:
                   items: { type: array, items: { $ref: '#/components/schemas/Card' } }
               example:
                 items:
-                  - { id: 0192f110-0000-7000-8000-000000000001, issuer: nubank, nickname: Nubank, last4: '4821', holder_display_name: MARINA COSTA, color: { skin: nubank_purple, hex: '#820AD1', is_custom: false }, closing_day: 28, due_day: 5, limit_cents: 800000, current_invoice: { id: 0192f111-0000-7000-8000-000000000001, closes_on: '2026-10-28', due_on: '2026-11-05', status: open, total_cents: 128430 }, committed_cents: 543430, active_installment_plans: 3, household: false }
-                  - { id: 0192f110-0000-7000-8000-000000000002, issuer: neon, nickname: Neon, last4: '7310', holder_display_name: MARINA COSTA, color: { skin: neon_cyan, hex: '#14C8D6', is_custom: false }, closing_day: 3, due_day: 10, limit_cents: 250000, current_invoice: { id: 0192f111-0000-7000-8000-000000000002, closes_on: '2026-11-03', due_on: '2026-11-10', status: open, total_cents: 21490 }, committed_cents: 21490, active_installment_plans: 0, household: false }
-                  - { id: 0192f110-0000-7000-8000-000000000003, issuer: inter, nickname: Inter, last4: null, holder_display_name: MARINA COSTA, color: { skin: inter_orange, hex: '#FF7A00', is_custom: false }, closing_day: 20, due_day: 27, limit_cents: 300000, current_invoice: { id: 0192f111-0000-7000-8000-000000000003, closes_on: '2026-10-20', due_on: '2026-10-27', status: open, total_cents: 31240 }, committed_cents: 31240, active_installment_plans: 0, household: false }
+                  - { id: 0192f110-0000-7000-8000-000000000001, issuer: nubank, nickname: Nubank, last4: '4821', holder_display_name: MARINA COSTA, color: { skin: roxo, hex: '#A855D3', text_hex: '#FFFFFF', is_custom: false }, closing_day: 28, due_day: 5, limit_cents: 800000, current_invoice: { id: 0192f111-0000-7000-8000-000000000001, closes_on: '2026-10-28', due_on: '2026-11-05', status: open, total_cents: 128430 }, committed_cents: 543430, active_installment_plans: 3, household: false }
+                  - { id: 0192f110-0000-7000-8000-000000000002, issuer: neon, nickname: Neon, last4: '7310', holder_display_name: MARINA COSTA, color: { skin: ciano, hex: '#1FBDEA', text_hex: '#FFFFFF', is_custom: false }, closing_day: 3, due_day: 10, limit_cents: 250000, current_invoice: { id: 0192f111-0000-7000-8000-000000000002, closes_on: '2026-11-03', due_on: '2026-11-10', status: open, total_cents: 21490 }, committed_cents: 21490, active_installment_plans: 0, household: false }
+                  - { id: 0192f110-0000-7000-8000-000000000003, issuer: inter, nickname: Inter, last4: null, holder_display_name: MARINA COSTA, color: { skin: preto, hex: '#1A1A1A', text_hex: '#D4D4D4', is_custom: false }, closing_day: 20, due_day: 27, limit_cents: 300000, current_invoice: { id: 0192f111-0000-7000-8000-000000000003, closes_on: '2026-10-20', due_on: '2026-10-27', status: open, total_cents: 31240 }, committed_cents: 31240, active_installment_plans: 0, household: false }
     post:
       tags: [Compromissos]
       operationId: createCard
@@ -1746,43 +1746,45 @@ paths:
                       properties:
                         code: { $ref: '#/components/schemas/CardIssuer' }
                         name: { type: string }
-                        default_skin: { type: string }
+                        default_skin: { $ref: '#/components/schemas/CardSkin' }
                   palette:
                     type: array
                     items:
                       type: object
-                      required: [skin, name, hex]
+                      required: [skin, name, hex, text_hex, gradient]
                       properties:
-                        skin: { type: string }
+                        skin: { $ref: '#/components/schemas/CardSkin' }
                         name: { type: string }
                         hex: { $ref: '#/components/schemas/HexColor' }
+                        text_hex: { $ref: '#/components/schemas/HexColor' }
+                        gradient: { type: array, items: { $ref: '#/components/schemas/HexColor' } }
               example:
                 issuers:
-                  - { code: nubank, name: Nubank, default_skin: nubank_purple }
-                  - { code: neon, name: Neon, default_skin: neon_cyan }
-                  - { code: itau, name: Itaú, default_skin: itau_orange }
-                  - { code: bradesco, name: Bradesco, default_skin: bradesco_red }
-                  - { code: inter, name: Inter, default_skin: inter_orange }
-                  - { code: c6, name: C6 Bank, default_skin: c6_black }
-                  - { code: santander, name: Santander, default_skin: santander_red }
-                  - { code: bb, name: Banco do Brasil, default_skin: bb_yellow }
-                  - { code: caixa, name: Caixa, default_skin: caixa_blue }
-                  - { code: mercadopago, name: Mercado Pago, default_skin: mp_blue }
-                  - { code: other, name: Outro, default_skin: graphite }
+                  - { code: nubank, name: Nubank, default_skin: roxo }
+                  - { code: neon, name: Neon, default_skin: ciano }
+                  - { code: itau, name: Itaú, default_skin: laranja }
+                  - { code: bradesco, name: Bradesco, default_skin: vermelho_azul }
+                  - { code: inter, name: Inter, default_skin: preto }
+                  - { code: c6, name: C6 Bank, default_skin: pink }
+                  - { code: santander, name: Santander, default_skin: vermelho }
+                  - { code: bb, name: Banco do Brasil, default_skin: amarelo }
+                  - { code: caixa, name: Caixa, default_skin: petroleo }
+                  - { code: mercadopago, name: Mercado Pago, default_skin: grafite }
+                  - { code: other, name: Outro, default_skin: azul_arclou }
                 palette:
-                  - { skin: neon_cyan, name: Ciano, hex: '#14C8D6' }
-                  - { skin: nubank_purple, name: Roxo, hex: '#820AD1' }
-                  - { skin: itau_orange, name: Laranja, hex: '#EC7000' }
-                  - { skin: gradient_wine, name: Vinho, hex: '#7B1E5A' }
-                  - { skin: c6_black, name: Preto, hex: '#111111' }
-                  - { skin: pink, name: Rosa, hex: '#E6007E' }
-                  - { skin: santander_red, name: Vermelho, hex: '#EC0000' }
-                  - { skin: bb_yellow, name: Amarelo, hex: '#F8D117' }
-                  - { skin: petrol, name: Petróleo, hex: '#005B7F' }
-                  - { skin: graphite, name: Grafite, hex: '#2E2E2E' }
-                  - { skin: caixa_blue, name: Azul-marinho, hex: '#1C2E6E' }
-                  - { skin: green, name: Verde, hex: '#00A868' }
-                  - { skin: silver, name: Prata, hex: '#C9CDD2' }
+                  - { skin: roxo, name: Roxo, hex: '#A855D3', text_hex: '#FFFFFF', gradient: ['#A855D3', '#7804A4'] }
+                  - { skin: ciano, name: Ciano, hex: '#1FBDEA', text_hex: '#FFFFFF', gradient: ['#1FBDEA', '#0BCED0'] }
+                  - { skin: laranja, name: Laranja, hex: '#EE661A', text_hex: '#FFFFFF', gradient: ['#EE661A', '#F2691A'] }
+                  - { skin: vermelho_azul, name: Vermelho e azul, hex: '#CD1646', text_hex: '#FFFFFF', gradient: ['#CD1646', '#94326B', '#323C90'] }
+                  - { skin: preto, name: Preto, hex: '#1A1A1A', text_hex: '#D4D4D4', gradient: ['#1A1A1A', '#0B0B0B'] }
+                  - { skin: pink, name: Pink, hex: '#EF60B0', text_hex: '#FFFFFF', gradient: ['#EF60B0', '#D31C69'] }
+                  - { skin: vermelho, name: Vermelho, hex: '#FF3A2E', text_hex: '#FFFFFF', gradient: ['#FF3A2E', '#E8170C'] }
+                  - { skin: amarelo, name: Amarelo, hex: '#F3DF34', text_hex: '#0B4C9C', gradient: ['#F3DF34', '#F2E43B'] }
+                  - { skin: petroleo, name: Petróleo, hex: '#00607F', text_hex: '#FFFFFF', gradient: ['#00607F', '#005574'] }
+                  - { skin: grafite, name: Grafite, hex: '#3A3B3A', text_hex: '#FFFFFF', gradient: ['#3A3B3A', '#1E1C1A'] }
+                  - { skin: azul_arclou, name: Azul Arclou, hex: '#2549AB', text_hex: '#FFFFFF', gradient: ['#2549AB', '#0B1026'] }
+                  - { skin: verde, name: Verde, hex: '#10B981', text_hex: '#FFFFFF', gradient: ['#10B981', '#047857'] }
+                  - { skin: prata, name: Prata, hex: '#EEF0F3', text_hex: '#1F2937', gradient: ['#EEF0F3', '#AEB4BD'] }
 
   /v1/cards/{card_id}:
     parameters:
@@ -1859,9 +1861,9 @@ paths:
                   by_method: { credit_card: 480000, boleto: 114000, carne: 60000, pix_installments: 0, financing: 0 }
                   counts: { all: 5, credit_card: 3, boleto: 1, carne: 1, pix_installments: 0, financing: 0 }
                 items:
-                  - { id: 0192f160-0000-7000-8000-000000000001, description: TV 55", category: { id: 0192f0c0-0000-7000-8000-000000000004, name: Casa, icon: home }, payment_method: credit_card, card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#820AD1' }, due_day: null, payment_label: Nubank •••• 4821, purchased_on: '2026-10-02', total_cents: 300000, installments: 10, installment_cents: 30000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-05', last_due_on: '2027-08-05', remaining_cents: 300000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel] }
-                  - { id: 0192f160-0000-7000-8000-000000000002, description: Curso de inglês, category: { id: 0192f0c0-0000-7000-8000-00000000000d, name: Educação, icon: receipt }, payment_method: credit_card, card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#820AD1' }, due_day: null, payment_label: Nubank •••• 4821, purchased_on: '2026-10-01', total_cents: 120000, installments: 6, installment_cents: 20000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-05', last_due_on: '2027-04-05', remaining_cents: 120000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel] }
-                  - { id: 0192f160-0000-7000-8000-000000000003, description: Fone de ouvido, category: { id: 0192f0c0-0000-7000-8000-00000000000e, name: Compras, icon: tag }, payment_method: credit_card, card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#820AD1' }, due_day: null, payment_label: Nubank •••• 4821, purchased_on: '2026-10-07', total_cents: 60000, installments: 4, installment_cents: 15000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-05', last_due_on: '2027-02-05', remaining_cents: 60000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel] }
+                  - { id: 0192f160-0000-7000-8000-000000000001, description: TV 55", category: { id: 0192f0c0-0000-7000-8000-000000000004, name: Casa, icon: home }, payment_method: credit_card, card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#A855D3' }, due_day: null, payment_label: Nubank •••• 4821, purchased_on: '2026-10-02', total_cents: 300000, installments: 10, installment_cents: 30000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-05', last_due_on: '2027-08-05', remaining_cents: 300000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel] }
+                  - { id: 0192f160-0000-7000-8000-000000000002, description: Curso de inglês, category: { id: 0192f0c0-0000-7000-8000-00000000000d, name: Educação, icon: receipt }, payment_method: credit_card, card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#A855D3' }, due_day: null, payment_label: Nubank •••• 4821, purchased_on: '2026-10-01', total_cents: 120000, installments: 6, installment_cents: 20000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-05', last_due_on: '2027-04-05', remaining_cents: 120000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel] }
+                  - { id: 0192f160-0000-7000-8000-000000000003, description: Fone de ouvido, category: { id: 0192f0c0-0000-7000-8000-00000000000e, name: Compras, icon: tag }, payment_method: credit_card, card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#A855D3' }, due_day: null, payment_label: Nubank •••• 4821, purchased_on: '2026-10-07', total_cents: 60000, installments: 4, installment_cents: 15000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-05', last_due_on: '2027-02-05', remaining_cents: 60000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel] }
                   - { id: 0192f160-0000-7000-8000-000000000004, description: Óculos de grau, category: { id: 0192f0c0-0000-7000-8000-000000000005, name: Saúde, icon: shield }, payment_method: carne, card: null, due_day: 10, payment_label: Carnê da ótica · vence dia 10, purchased_on: '2026-10-10', total_cents: 60000, installments: 5, installment_cents: 12000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-10', last_due_on: '2027-03-10', remaining_cents: 60000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel, register_payment] }
                   - { id: 0192f160-0000-7000-8000-000000000005, description: Matrícula da faculdade, category: { id: 0192f0c0-0000-7000-8000-00000000000d, name: Educação, icon: receipt }, payment_method: boleto, card: null, due_day: 15, payment_label: Boleto · vence dia 15, purchased_on: '2026-10-09', total_cents: 114000, installments: 3, installment_cents: 38000, interest_cents: 0, paid_count: 0, next_due_on: '2026-11-15', last_due_on: '2027-01-15', remaining_cents: 114000, status: active, visibility: personal, allowed_actions: [view_schedule, edit, payoff, cancel, register_payment] }
     post:
@@ -1931,7 +1933,7 @@ paths:
                 description: TV 55"
                 category: { id: 0192f0c0-0000-7000-8000-000000000004, name: Casa, icon: home }
                 payment_method: credit_card
-                card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#820AD1' }
+                card: { id: 0192f110-0000-7000-8000-000000000001, nickname: Nubank, last4: '4821', color_hex: '#A855D3' }
                 due_day: null
                 payment_label: Nubank •••• 4821
                 purchased_on: '2026-10-02'
@@ -2656,7 +2658,7 @@ paths:
               example:
                 id: 0192f190-0000-7000-8000-000000000001
                 name: Conta conjunta
-                color: { skin: nubank_purple, hex: '#820AD1', is_custom: false }
+                color: { skin: roxo, hex: '#A855D3', text_hex: '#FFFFFF', is_custom: false }
                 month: '2026-10'
                 balance_today_cents: 919130
                 last_reconciled_on: '2026-10-01'
@@ -2699,7 +2701,7 @@ paths:
               required: [name, opening_balance_cents, opening_on]
               properties:
                 name: { type: string, maxLength: 40 }
-                color_skin: { type: string }
+                color_skin: { $ref: '#/components/schemas/CardSkin' }
                 custom_color: { oneOf: [{ $ref: '#/components/schemas/HexColor' }, { type: 'null' }] }
                 opening_balance_cents: { $ref: '#/components/schemas/Cents' }
                 opening_on: { type: string, format: date }
@@ -3107,12 +3109,17 @@ components:
         nickname: { type: string }
         last4: { type: [string, 'null'] }
         color_hex: { $ref: '#/components/schemas/HexColor' }
+    CardSkin:
+      type: string
+      enum: [roxo, ciano, laranja, vermelho_azul, preto, pink, vermelho, amarelo, petroleo, grafite, azul_arclou, verde, prata, custom]
+      description: 'Variante `Cor` do componente Web/BankCard (doc 09). `custom` usa `custom_color`'
     CardColor:
       type: object
-      required: [skin, hex, is_custom]
+      required: [skin, hex, text_hex, is_custom]
       properties:
-        skin: { type: string }
+        skin: { $ref: '#/components/schemas/CardSkin' }
         hex: { $ref: '#/components/schemas/HexColor' }
+        text_hex: { $ref: '#/components/schemas/HexColor', description: 'Cor do texto (contraste WCAG na personalizada)' }
         is_custom: { type: boolean }
     Quota:
       type: object
@@ -3938,7 +3945,7 @@ components:
         closing_day: { type: integer, minimum: 1, maximum: 31 }
         due_day: { type: integer, minimum: 1, maximum: 31 }
         limit_cents: { type: [integer, 'null'], minimum: 1 }
-        color_skin: { type: string, description: Uma das 13 cores; padrão = cor do banco }
+        color_skin: { $ref: '#/components/schemas/CardSkin' }
         custom_color: { oneOf: [{ $ref: '#/components/schemas/HexColor' }, { type: 'null' }] }
         household: { type: boolean, default: false }
     CardInvoice:

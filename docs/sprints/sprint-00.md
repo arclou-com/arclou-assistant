@@ -1,10 +1,11 @@
 # Sprint 0 — Infra, Terraform, workflow e contrato de API
 
-**Datas:** 19/10 – 30/10/2026 · **Pontos:** 40
-**Objetivo:** repositório protegido, toda a infra criada por Terraform e um "hello world" da API e do web publicado em staging e production na VM pelo pipeline.
+**Datas:** 19/10 – 30/10/2026 · **Pontos:** 40 (back/infra) + 13 (front)
+**Objetivo:** repositório protegido, toda a infra criada por Terraform e um "hello world" da API e do web publicado em staging e production na VM pelo pipeline. Em paralelo, a **trilha de front** monta a base pixel perfect (tokens, componentes, layout e login) contra o mock do contrato.
 **Referências:** [doc 12 — Ambientes e workflow](../12-ambientes-e-workflow.md) · [doc 04 — Arquitetura](../04-arquitetura.md) · [doc 05 — Backlog](../05-backlog-sprints.md)
 
-Ordem sugerida: S0-01 → S0-02 → S0-03 → (S0-06, S0-07, S0-04 → S0-05, S0-08) → S0-10 → S0-11 → S0-09 → S0-12 → S0-14 → S0-13.
+Ordem sugerida (back/infra): S0-01 → S0-02 → S0-03 → (S0-06, S0-07, S0-04 → S0-05, S0-08) → S0-10 → S0-11 → S0-09 → S0-12 → S0-14 → S0-13.
+Ordem sugerida (front): S0-10 (web) → S0-14 (mock + cliente) → S0-F01 → S0-F02 → S0-F03.
 
 ---
 
@@ -432,3 +433,109 @@ O front será construído por completo contra o contrato antes de o backend exis
 3. Remover um campo do schema sem rodar `api:gen` → o job `contract` falha.
 
 **Dependências:** S0-01, S0-11 e o **doc 13** (contrato), escrito antes do início da sprint.
+
+---
+
+### S0-F01 · Base do front: tokens do Figma, tipografia e componentes primitivos
+
+**Contexto**
+O front precisa ficar **pixel perfect** com o Figma (DoD). Tudo parte da biblioteca "Componentes · Painel Web" (node `53:2` do arquivo `PJ7SvIZo5iVL4GqUoT0xAi`), que já usa **variáveis semânticas** com modos Dark e Light. Se os tokens e os primitivos saírem certos aqui, todas as telas das próximas sprints só compõem peças prontas.
+
+**Escopo**
+- **Stack de UI:** Tailwind CSS v4 com os tokens como CSS variables; Radix UI para comportamento acessível (Dialog, DropdownMenu, Switch, Checkbox, Toast, Tabs) estilizado com os tokens; `lucide-react` para os ícones (os nomes do Figma `Icon/*` já seguem o Lucide).
+- **Tokens** (`web/src/styles/tokens.css`), exportados das variáveis do Figma nos dois modos (`[data-theme="dark"]` e `[data-theme="light"]`):
+  - cores: `--bg-canvas`, `--bg-canvas-deep`, `--bg-nav`, `--bg-card`, `--bg-overlay`, `--text-primary|secondary|soft|detail|disabled|link|nav|on-action|hero-label`, `--icon-*`, `--border-field|focus|subtle|item|selected`, `--action-primary|disabled`, `--status-{success,error,warning,info}-{fg,bg}`, `--finance-committed`;
+  - espaçamento `--space-2…32`, raios `--radius-sm|md|lg|pill`, tamanhos `--size-control-sm|md`, `--size-avatar`, `--stroke-width`;
+  - elevação `Elevation/2` (sombra 0 16 40 #00000066);
+  - tipografia Roboto (via `next/font`): Display 45/700, Title 23, Section 20, Body 16, Body Strong 16/600, Action 16/600, Caption 14, Caption Strong 14/600, Micro 12, Micro Strong 12/600.
+- Script `npm run tokens:sync` que lê as variáveis do Figma (API REST com token pessoal no `.env.local`, nunca no repo) e regenera o `tokens.css`. O arquivo gerado é commitado.
+- **Tema:** `ThemeProvider` (light/dark/system) persistido em `localStorage` e sincronizado com `preferences.theme` (`updateMe`), sem flash ao carregar (script inline no `<head>`). Componentes `Web/ThemeToggle` e `Web/ThemeIconButton`.
+- **Primitivos** (`web/src/components/ui/`), cada um com todas as variantes da biblioteca:
+  - `Button` (primary, secondary, link, ghost) e `Web/ButtonLoading`;
+  - `Web/TextField` (Default, Focus, Error, Disabled; com label, ajuda e erro) e máscara de dinheiro (R$, digita centavos);
+  - `Web/Checkbox` (Checked, Unchecked, Error), `Web/Toggle` (On/Off), `SegmentedControl`;
+  - `Badge`, `Avatar` (iniciais, 47 px), `Web/Skeleton` (Line, Title, Block, Circle);
+  - `Web/Toast` (Success, Error, Info, Loading) e `Web/Banner` (Warning, Error, Info);
+  - `Modal` (desktop) e `Sheet` (mobile 430), com scrim; `Menu ⋯` (DropdownMenu) e action sheet no mobile.
+- Os componentes de domínio (IntegrationCard, PlanCard, OrderSummary, CheckoutSteps, BankCard, StepItem, SettingRow) entram junto com as telas que os usam.
+- **Storybook 8** com uma story por variante, nos dois temas.
+- **Teste visual:** Playwright tira screenshot de cada story e compara com o PNG exportado do mesmo componente no Figma (`tests/visual/figma/*.png`, gerados por `npm run figma:export`). Tolerância: **≤ 1% de pixels diferentes**.
+- Vitest + Testing Library para comportamento (foco, teclado, estados de erro, `aria-*`).
+
+**Fora do escopo:** telas (S0-F02 em diante), componentes de domínio.
+
+**Critérios de aceite**
+- [ ] `tokens.css` gerado das variáveis do Figma, com os modos Dark e Light
+- [ ] Todos os primitivos listados existem com todas as variantes da biblioteca, em Dark e Light
+- [ ] Teste visual de cada variante passa com diferença ≤ 1% em relação ao Figma
+- [ ] Navegação só por teclado funciona (Tab, Enter, Esc no modal/menu) e o foco usa `--border-focus`
+- [ ] Trocar o tema não pisca a tela no carregamento
+- [ ] Storybook publicado como artefato do CI
+
+**Testes / como validar**
+1. `npm run storybook` → comparar cada story com o componente no Figma, nos dois temas.
+2. `npm run test:visual` → relatório do Playwright com o diff de cada variante.
+3. `npm test` → testes de comportamento verdes.
+
+**Dependências:** S0-10 (Next.js criado), S0-14 (cliente gerado).
+
+---
+
+### S0-F02 · Layout do painel, navegação e estados de tela
+
+**Contexto**
+Todas as telas do painel compartilham a mesma moldura: sidebar fixa no desktop e barra superior + tab bar no mobile. Os frames do Figma têm 1920 × 1080 com rolagem vertical (sidebar fixa, conteúdo rola) e 430 de largura no mobile.
+
+**Escopo**
+- `Web/Sidebar` (264 px, fixa) com `Web/SidebarItem` (Active/Default) na ordem do Figma: Visão geral, Finanças, Casa, WhatsApp, Integrações, Perfil e preferências, Assinatura, Privacidade e dados, Central de ajuda. No rodapé: card "Fale com a Arclou", `ThemeToggle` e o usuário (avatar, nome, e-mail, sair).
+- O item "Casa" aparece conforme `getHousehold` / plano (sem Casa e sem plano Casal → leva para H02).
+- Mobile (< 1024 px): `Web/MobileTopBar` + `Web/MobileTabBar` com os destinos das telas M*.
+- Rotas do App Router com o layout e páginas-esqueleto para todas as telas do painel (`/visao-geral`, `/financas/*`, `/casa/*`, `/whatsapp`, `/integracoes`, `/perfil`, `/assinatura`, `/privacidade`), cada uma com o cabeçalho (título + subtítulo) do Figma.
+- Abas de Finanças (Visão do mês, Limites e receitas, Compromissos, Parcelamentos, Planejamento e metas) como sub-rotas.
+- **Estados** (linha "Estados no Dark"): carregando (Skeleton), vazio, erro com "tentar de novo" (Banner) e sem conexão. Um componente `PageState` padroniza isso para todas as telas.
+- Camada de dados: TanStack Query sobre o cliente gerado (`openapi-fetch`), com tratamento padrão de `Problem` (401 → login, 403 `plan_required` → upsell, 422 → erros nos campos).
+- Breakpoints: desktop ≥ 1280 (referência 1920), tablet 1024–1279, mobile ≤ 430 (referência 430).
+
+**Critérios de aceite**
+- [ ] Sidebar e tab bar iguais ao Figma (teste visual ≤ 1%) nos dois temas
+- [ ] No desktop, a sidebar fica fixa e só o conteúdo rola
+- [ ] Todas as rotas do painel existem e mostram o cabeçalho correto
+- [ ] Os 4 estados aparecem ao forçar o mock (`Prefer: code=500`, latência, lista vazia, offline)
+- [ ] Item ativo da navegação correto em todas as rotas
+
+**Testes / como validar**
+1. Playwright navega por todas as rotas, em 1920 × 1080 e em 430 × 932, e compara com os frames do Figma.
+2. Forçar `Prefer: code=500` no mock → Banner de erro com "tentar de novo".
+
+**Dependências:** S0-F01.
+
+---
+
+### S0-F03 · Login, cadastro com Firebase Auth e rotas protegidas
+
+**Contexto**
+O painel só abre para quem está logado. O login (tela "01 · Login") e a criação de conta (C02) usam o Firebase Auth (e-mail/senha e Google). A API recebe o ID token no `Authorization`.
+
+**Escopo**
+- Telas pixel perfect: "01 · Login" (Entrar, Continuar com Google, Esqueci minha senha, "Conheça os planos") e o formulário de C02 "Crie sua conta" (Criar com Google, nome, e-mail, senha, aceite dos termos).
+- Firebase Web SDK configurado por ambiente (`NEXT_PUBLIC_FIREBASE_*` do output do S0-07). Em dev, o **Firebase Auth Emulator** (no compose de dev) para não depender do projeto real.
+- Recuperação de senha (e-mail do Firebase) e mensagens de erro em pt-BR (senha fraca, e-mail em uso, credencial inválida, muitas tentativas).
+- Middleware/guard: rotas do painel exigem sessão; sem sessão → `/entrar?next=…`. Logado em `/entrar` → painel.
+- O cliente da API injeta o ID token e o renova quando expira (`onIdTokenChanged`). Um 401 da API faz logout.
+- Depois do login: `getMe`. Se o usuário não tem plano (`plan = null`), vai para a escolha de plano (checkout, Sprint 1).
+- Aceite dos termos via `recordConsent`.
+- Logout no rodapé da sidebar.
+
+**Critérios de aceite**
+- [ ] Login e cadastro por e-mail/senha e por Google funcionam (emulador em dev, Firebase de staging no ambiente)
+- [ ] Sem sessão, qualquer rota do painel redireciona para o login e volta para a rota original depois
+- [ ] Token expirado é renovado sem o usuário perceber
+- [ ] Erros do Firebase aparecem em pt-BR no campo certo
+- [ ] Telas iguais ao Figma (teste visual ≤ 1%), Dark e Light, desktop e mobile
+
+**Testes / como validar**
+1. Playwright com o emulador: cadastro → login → painel → logout → login de novo.
+2. Acessar `/financas` deslogado → redireciona e volta depois do login.
+3. Forçar a expiração do token no emulador → a próxima chamada renova o token.
+
+**Dependências:** S0-F02. Em staging, S0-07 (Firebase Auth do ambiente).
