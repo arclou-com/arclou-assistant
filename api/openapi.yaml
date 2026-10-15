@@ -4479,4 +4479,3 @@ components:
               title: { type: string }
               section: { type: string }
               snippet: { type: string }
-

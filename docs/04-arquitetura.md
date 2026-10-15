@@ -191,7 +191,7 @@ goals(id, user_id, name, target_cents, saved_cents, deadline date, status[active
 goal_contributions(id, goal_id, amount_cents, contributed_on, source[manual|auto])
 insights(id, user_id, kind, payload jsonb, period, sent_at null, dismissed_at null)
 -- views materializadas: monthly_category_totals(user_id, month, category_id, total_cents) p/ dashboards e insights
-oauth_connections(id, user_id, provider[google], scopes text[], 
+oauth_connections(id, user_id, provider[google], scopes text[],
                   access_token_enc bytea, refresh_token_enc bytea, expires_at, status)
 scheduled_notifications(id, user_id, kind[reminder|event|bill|daily_summary|budget],
                         payload jsonb, send_at timestamptz, status, attempts, sent_at)

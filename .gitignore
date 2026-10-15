@@ -1,11 +1,52 @@
-__pycache__/
-*.pyc
+# Segredos
 .env
 .env.*
 !.env.example
-.terraform/
-*.tfstate*
+*.pem
+*.key
+credentials*.json
+service-account*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+
+# Node
 node_modules/
 .next/
-.venv/
+out/
+coverage/
+*.tsbuildinfo
+.npm/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Editores e SO
+.idea/
+.vscode/*
+!.vscode/extensions.json
 .DS_Store
+Thumbs.db
+
+# Playwright
+test-results/
+playwright-report/

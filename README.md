@@ -20,6 +20,22 @@ Assistente pessoal por assinatura que controla **gastos, agenda e e-mails** do u
 | [13 — Contrato da API](docs/13-contrato-api.md) | Convenções, mapa tela → endpoint, fluxos e mock do `api/openapi.yaml` (OpenAPI 3.1) |
 | [Sprints](docs/sprints/) | Especificação detalhada de cada sprint (contexto, escopo, critérios de aceite e testes por task). É a fonte do corpo das issues (`scripts/github_backlog.py --sprint N`) |
 
+## Estrutura do monorepo
+```
+api/            contrato OpenAPI 3.1 (doc 13): fonte do mock e do cliente TS
+backend/        FastAPI + worker arq (Python 3.12, hexagonal)
+web/            Next.js: página de vendas, checkout, painel e Central de Ajuda
+infra/
+  terraform/    toda a GCP (bootstrap, modules, envs)
+  compose/      Docker Compose de dev, staging, production e edge (Caddy)
+  caddy/        Caddyfile
+  scripts/      deploy, segredos e backup
+docs/           planejamento (01–13) e especificação de cada sprint
+scripts/        utilitários (custos, sync do backlog com o GitHub)
+```
+
+Para começar: `make setup` e leia o [CONTRIBUTING](CONTRIBUTING.md).
+
 ## Stack
 Python 3.12 · FastAPI · LangGraph/LangChain · Vertex AI (Gemini) · PostgreSQL + pgvector · Firestore · Redis + arq · Firebase Auth · WhatsApp Cloud API · Next.js · Docker · Caddy · VM no GCE · Terraform · GitHub Actions
 
