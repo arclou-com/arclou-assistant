@@ -90,6 +90,9 @@ infra/terraform/
 
 ## 4. Git, PRs e GitHub Project
 
+### Repositório
+O repositório `arclou-com/arclou-assistant` é **público**: no plano Free, é o que libera rulesets e Environments com aprovação. Por isso, nenhum segredo entra no código, e o gitleaks roda no pre-commit e no CI.
+
 ### Branches
 ```
 feature/S2-07-vinculo-whatsapp ─┐
@@ -114,7 +117,7 @@ hotfix/... ── PR → main, depois merge de volta em develop
 
 - **Issues:** uma por linha do doc 05 (título `S2-07 · Vínculo do WhatsApp`) com o critério de aceite como checklist. Cada sprint tem uma **issue-épico** com as tasks como sub-issues.
 - **Uma sprint por vez:** as issues de uma sprint só são criadas no planejamento dela, com `python3 scripts/github_backlog.py --sprint N`. Até lá, o backlog futuro fica no doc 05, onde é barato de ajustar.
-- **Views:** *Sprint atual* (board por Status, filtro `sprint:@current`), *Backlog* (tabela agrupada por Sprint, soma de pontos), *Roadmap* (por Sprint) e *Por área*.
+- **Views:** *View 1* (tabela) e *View 3* (board por Status). No board, use o filtro `sprint:@current` para ver a sprint atual.
 - **Automação:** issue entra como Backlog. Quando o PR é aberto, vai para In Review. Com o merge, vai para Done.
 
 ## 5. Pipelines (GitHub Actions)

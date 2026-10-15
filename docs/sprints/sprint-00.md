@@ -44,7 +44,9 @@ O repositório `arclou-com/arclou-assistant` hoje só tem `docs/` e `scripts/`. 
 **Contexto**
 O fluxo combinado é `feature/* → PR → develop` (staging) e `develop → PR de release → main` (production). Ninguém faz push direto em `main` nem em `develop` (doc 12 §4).
 
-> ⚠️ **Bloqueio:** a org `arclou-com` está no plano **Free**. Em repo privado, esse plano **não** permite proteção de branch, rulesets nem aprovação obrigatória em Environments. Antes desta task, decidir entre: assinar o GitHub Team (US$ 4/usuário/mês) ou tornar o repo público.
+> **Já feito em 15/10/2026:** o repo virou **público** (decisão do owner, para ter rulesets e Environments no plano Free). Os rulesets `protect-main` e `protect-develop` já bloqueiam push direto, force push e exclusão, e exigem PR (squash na `develop`). Os Environments `staging` (só `develop`) e `production` (só `main`, com aprovação do owner) já existem. **Falta:** os status checks obrigatórios (depois do S0-11), os templates, o CODEOWNERS e o CONTRIBUTING.
+>
+> Com o repo público, **nenhum segredo entra no código**: o gitleaks (S0-01 e S0-11) e o Secret Manager (S0-07) são obrigatórios.
 
 **Escopo**
 - **Ruleset `main`:** só via PR; status checks obrigatórios (`ci / backend`, `ci / web`, `ci / contract`, `terraform / plan`), branch atualizada antes do merge, merge commit permitido (release), sem force push e sem exclusão.
