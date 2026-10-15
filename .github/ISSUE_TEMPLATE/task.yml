@@ -1,0 +1,23 @@
+name: Task
+description: Uma task do backlog (normalmente criada por scripts/github_backlog.py)
+title: "SN-NN · "
+labels: []
+body:
+  - type: textarea
+    id: context
+    attributes: { label: Contexto, description: Por que essa task existe }
+    validations: { required: true }
+  - type: textarea
+    id: scope
+    attributes: { label: Escopo, description: O que fazer (e o que fica de fora) }
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Critérios de aceite, value: "- [ ] " }
+    validations: { required: true }
+  - type: textarea
+    id: tests
+    attributes: { label: Testes / como validar }
+  - type: input
+    id: deps
+    attributes: { label: Dependências, placeholder: "#12, #15" }

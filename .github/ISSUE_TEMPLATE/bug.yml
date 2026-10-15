@@ -1,0 +1,20 @@
+name: Bug
+description: Algo não funciona como deveria
+title: "bug: "
+labels: [bug]
+body:
+  - type: dropdown
+    id: env
+    attributes: { label: Ambiente, options: [staging, production, local] }
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes: { label: Passos para reproduzir, value: "1. " }
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Esperado × obtido }
+    validations: { required: true }
+  - type: textarea
+    id: evidence
+    attributes: { label: Evidências, description: Prints, trace_id, horário (sem dados pessoais) }
