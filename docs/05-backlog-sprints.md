@@ -2,7 +2,7 @@
 
 > Revisão de 15/10/2026: a infra sai da VPS Hostinger e vai para **uma VM no GCE** que roda staging e production em Docker, provisionada com **Terraform** e desligada fora do horário comercial (doc 12). As telas do Figma estão prontas, então o front entra junto com cada funcionalidade. As antigas sprints 3b e 3c viraram sprints de 2 semanas.
 
-Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Estimativa em pontos (1, 2, 3, 5, 8). Duas trilhas em paralelo: **back/infra (~30 pontos por sprint)** e **front (~15 pontos por sprint)**, recalibradas no fim do Sprint 1. A trilha de front constrói **todas as telas nas Sprints 1–6 contra o mock do contrato**. Depois disso, cada sprint de backend tem uma task de integração que troca o mock pela API real daquelas telas. O quadro fica no **GitHub Project** (doc 12 §4). Cada linha das tabelas abaixo vira uma issue.
+Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Estimativa em pontos (1, 2, 3, 5, 8). Duas trilhas em paralelo: **back/infra (~30 pontos por sprint)** e **front (~15 pontos por sprint)**, recalibradas no fim do Sprint 1. A trilha de front constrói **todas as telas nas Sprints 0–5 contra o mock do contrato** (adiantada em 15/10/2026: a base do front entra já na Sprint 0). Depois disso, cada sprint de backend tem uma task de integração que troca o mock pela API real daquelas telas. O quadro fica no **GitHub Project** (doc 12 §4). Cada linha das tabelas abaixo vira uma issue.
 
 **Contrato primeiro:** o contrato da API (`api/openapi.yaml`, doc 13) cobre **todas as telas** antes do desenvolvimento. O front consome o mock gerado a partir dele e pode ser construído por completo sem esperar o backend. Cada task de backend implementa rotas que já estão no contrato; mudar o contrato é um PR próprio, revisado.
 
@@ -31,13 +31,13 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 ## Calendário
 | Sprint | Datas | Tema | Back/infra | Front |
 |---|---|---|---|---|
-| 0 | 19/10 – 30/10/2026 | Infra, Terraform, workflow e contrato de API | 40 | — |
-| 1 | 02/11 – 13/11 | Esqueleto da aplicação · feriado 02/11 | 23 | 13 |
+| 0 | 19/10 – 30/10/2026 | Infra, Terraform, workflow e contrato de API | 40 | 13 |
+| 1 | 02/11 – 13/11 | Esqueleto da aplicação · feriado 02/11 | 23 | 16 |
 | 2 | 16/11 – 27/11 | Gateway WhatsApp e vínculo · feriado 20/11 | 32 | 16 |
-| 3 | 30/11 – 11/12 | Núcleo do agente | 37 | 16 |
-| 4 | 14/12 – 25/12 | Gastos · feriado 25/12 | 34 | 13 |
-| 5 | 28/12 – 08/01/2027 | Finanças I: receitas, limites e disponível · feriado 01/01 | 29 | 16 |
-| 6 | 11/01 – 22/01 | Finanças II: recorrentes, cartões e parcelas | 30 | 8 |
+| 3 | 30/11 – 11/12 | Núcleo do agente | 37 | 13 |
+| 4 | 14/12 – 25/12 | Gastos · feriado 25/12 | 34 | 16 |
+| 5 | 28/12 – 08/01/2027 | Finanças I: receitas, limites e disponível · feriado 01/01 | 29 | 8 |
+| 6 | 11/01 – 22/01 | Finanças II: recorrentes, cartões e parcelas | 30 | — |
 | 7 | 25/01 – 05/02 | Finanças III: metas, simulação e insights | 25 | — |
 | 8 | 08/02 – 19/02 | Casa I: modelo, convite e divisão · Carnaval 08–09/02 | 28 | — |
 | 9 | 22/02 – 05/03 | Casa II: conta conjunta, privacidade e saída | 29 | — |
@@ -72,8 +72,17 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S0-13 | Runbook inicial: ligar a VM, deploy e rollback manuais, SSH pelo IAP, custos | docs | 1 | Documento em `docs/runbook.md` |
 | S0-14 | Contrato de API no repo (`api/openapi.yaml`, doc 13): lint com Spectral no CI, mock server (Prism) no compose de dev e cliente TS gerado (`openapi-typescript`) para o `web/` | devops | 3 | Mudança no contrato sem regenerar o cliente quebra o CI. O front roda 100% contra o mock |
 
+
+**Trilha de front (base: tokens, layout e login, contra o mock):**
+
+| ID | Task | Área | Pts | Critério de aceite / testes |
+|---|---|---|---|---|
+| S0-F01 | Next.js (App Router, TS), tokens do Figma (Dark/Light), fontes e componentes base a partir da biblioteca do Figma (node `53:2`): botão, field, card, modal, drawer, toast, menu ⋯, badge, sidebar. Vitest + Testing Library + teste visual (Playwright screenshots). Cliente gerado do contrato apontando para o mock | frontend | 5 | Componentes pixel perfect com o Figma nos dois temas (diferença visual ≤ 1%) |
+| S0-F02 | Layout do painel (sidebar fixa, cabeçalho, desktop 1920 com rolagem, mobile 430) e estados de carregamento, vazio e erro (linha "Estados no Dark") | frontend | 5 | Testes de componente |
+| S0-F03 | Login com Firebase Auth (linha "Página de vendas e login"), rotas protegidas e envio do ID token | frontend | 3 | Sem login → redireciona. Token vencido → renova |
+
 ## Sprint 1 — Esqueleto da aplicação (02/11 – 13/11)
-**Objetivo:** backend com banco, fila, logs e auth em staging. O front começa a trilha dele contra o mock.
+**Objetivo:** backend com banco, fila, logs e auth em staging. O front segue a trilha dele contra o mock.
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
@@ -89,13 +98,14 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S1-13 | Teste de contrato do backend contra o `openapi.yaml` (schemathesis): rota implementada que diverge do contrato quebra o CI | backend | 2 | Rota com campo a mais/a menos falha |
 
 
-**Trilha de front (base: tokens, layout e login, contra o mock):**
+**Trilha de front (entrada do cliente, contra o mock):**
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
-| S1-F01 | Next.js (App Router, TS), tokens do Figma (Dark/Light), fontes e componentes base a partir da biblioteca do Figma (node `53:2`): botão, field, card, modal, drawer, toast, menu ⋯, badge, sidebar. Vitest + Testing Library + teste visual (Playwright screenshots). Cliente gerado do contrato apontando para o mock | frontend | 5 | Componentes pixel perfect com o Figma nos dois temas (diferença visual ≤ 1%) |
-| S1-F02 | Layout do painel (sidebar fixa, cabeçalho, desktop 1920 com rolagem, mobile 430) e estados de carregamento, vazio e erro (linha "Estados no Dark") | frontend | 5 | Testes de componente |
-| S1-F03 | Login com Firebase Auth (linha "Página de vendas e login"), rotas protegidas e envio do ID token | frontend | 3 | Sem login → redireciona. Token vencido → renova |
+| S1-F01 | Página de vendas (SSR, SEO, desktop e mobile) | frontend | 5 | Lighthouse ≥ 90 |
+| S1-F02 | Cadastro e checkout (C02–C06): escolha de plano, dados, pagamento, trial e pagamento recusado | frontend | 8 | Fluxo completo contra o mock, incluindo erros |
+| S1-F03 | Vincular WhatsApp (D03): código, link/QR e status do vínculo | frontend | 3 | Testes de componente |
+
 ## Sprint 2 — Gateway WhatsApp e vínculo (16/11 – 27/11)
 **Objetivo:** usuário cadastrado vincula o número e recebe um eco da mensagem.
 
@@ -113,13 +123,15 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S2-12 | Integração: login e vínculo do WhatsApp na API real (mock → staging) | frontend | 2 | E2E em staging sem o mock |
 
 
-**Trilha de front (entrada do cliente, contra o mock):**
+**Trilha de front (finanças, contra o mock):**
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
-| S2-F01 | Página de vendas (SSR, SEO, desktop e mobile) | frontend | 5 | Lighthouse ≥ 90 |
-| S2-F02 | Cadastro e checkout (C02–C06): escolha de plano, dados, pagamento, trial e pagamento recusado | frontend | 8 | Fluxo completo contra o mock, incluindo erros |
-| S2-F03 | Vincular WhatsApp (D03): código, link/QR e status do vínculo | frontend | 3 | Testes de componente |
+| S2-F01 | Gastos e lançamentos (F01): lista, filtros, editar, excluir, desfazer | frontend | 5 | Testes de componente |
+| S2-F02 | Finanças: visão, limites e receitas (F02, F02b) | frontend | 5 | Testes de componente |
+| S2-F03 | Planejamento e metas (F03) | frontend | 3 | Testes de componente |
+| S2-F04 | Integrações: conectar Google Agenda (D04) e e-mail (E09), com status e desconectar | frontend | 3 | Testes de componente |
+
 ## Sprint 3 — Núcleo do agente (30/11 – 11/12)
 **Objetivo:** conversa útil com guardrails e observabilidade. Ainda sem integrações.
 
@@ -137,14 +149,14 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S3-10 | **Harness de evals** (`tests/evals`): golden conversations com asserts de tool e argumentos | agent | 5 | Roda no CI (nightly, modelo real, durante o horário da VM) e gera relatório |
 
 
-**Trilha de front (finanças, contra o mock):**
+**Trilha de front (compromissos, plano e conta, contra o mock):**
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
-| S3-F01 | Gastos e lançamentos (F01): lista, filtros, editar, excluir, desfazer | frontend | 5 | Testes de componente |
-| S3-F02 | Finanças: visão, limites e receitas (F02, F02b) | frontend | 5 | Testes de componente |
-| S3-F03 | Planejamento e metas (F03) | frontend | 3 | Testes de componente |
-| S3-F04 | Integrações: conectar Google Agenda (D04) e e-mail (E09), com status e desconectar | frontend | 3 | Testes de componente |
+| S3-F01 | Compromissos (F04), Parcelamentos com cartões visuais (F05, F05c, doc 09), modais de receita recorrente e compra parcelada, menu ⋯ / action sheet (F05b) | frontend | 8 | Testes de componente |
+| S3-F02 | Trocar de plano (D06) e uso/quotas | frontend | 2 | Testes de componente |
+| S3-F03 | Perfil, preferências, privacidade, exportar dados e excluir conta (D07) | frontend | 3 | Testes de componente |
+
 ## Sprint 4 — Gastos (14/12 – 25/12)
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
@@ -160,13 +172,15 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S4-10 | Integração: telas de gastos na API real | frontend | 2 | E2E em staging sem o mock |
 
 
-**Trilha de front (compromissos, plano e conta, contra o mock):**
+**Trilha de front (Casa, contra o mock):**
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
-| S4-F01 | Compromissos (F04), Parcelamentos com cartões visuais (F05, F05c, doc 09), modais de receita recorrente e compra parcelada, menu ⋯ / action sheet (F05b) | frontend | 8 | Testes de componente |
-| S4-F02 | Trocar de plano (D06) e uso/quotas | frontend | 2 | Testes de componente |
-| S4-F03 | Perfil, preferências, privacidade, exportar dados e excluir conta (D07) | frontend | 3 | Testes de componente |
+| S4-F01 | Casa: convite, visão, divisão e escolher o modo (H01, H02, H03) + lado do convidado (J02) | frontend | 5 | Testes de componente |
+| S4-F02 | Casa · ações ⋯, acertar contas e o que o parceiro vê (H01b, H01c, H01d) | frontend | 3 | Testes de componente |
+| S4-F03 | Dinheiro junto (HJ01, HJ01b, HJ01c), lançamento com origem e saída da Casa (HS01–HS04) | frontend | 5 | Testes de componente |
+| S4-F04 | Checkout do Plano Casal | frontend | 3 | Fluxo completo contra o mock |
+
 ## Sprint 5 — Finanças I: receitas, limites e disponível (28/12 – 08/01)
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
@@ -180,14 +194,13 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S5-08 | Integração: Finanças (visão, limites, receitas) na API real | frontend | 2 | E2E em staging sem o mock |
 
 
-**Trilha de front (Casa, contra o mock):**
+**Trilha de front (Central de Ajuda e fechamento, contra o mock):**
 
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
-| S5-F01 | Casa: convite, visão, divisão e escolher o modo (H01, H02, H03) + lado do convidado (J02) | frontend | 5 | Testes de componente |
-| S5-F02 | Casa · ações ⋯, acertar contas e o que o parceiro vê (H01b, H01c, H01d) | frontend | 3 | Testes de componente |
-| S5-F03 | Dinheiro junto (HJ01, HJ01b, HJ01c), lançamento com origem e saída da Casa (HS01–HS04) | frontend | 5 | Testes de componente |
-| S5-F04 | Checkout do Plano Casal | frontend | 3 | Fluxo completo contra o mock |
+| S5-F01 | Central de Ajuda (SSR em `ajuda.arclou.com.br`): início, abas, artigo, busca e feedback | frontend | 5 | Navegação igual ao Figma |
+| S5-F02 | E2E Playwright navegando todas as telas contra o mock + revisão de acessibilidade (WCAG AA) e responsivo | frontend | 3 | Todas as rotas do contrato usadas por alguma tela |
+
 ## Sprint 6 — Finanças II: recorrentes, cartões e parcelas (11/01 – 22/01)
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|
@@ -198,13 +211,6 @@ Sprints de **2 semanas**, de segunda a sexta, começando em **19/10/2026**. Esti
 | S6-05 | Ações por compra parcelada: cronograma, editar só parcelas futuras, registrar pagamento, quitar, cancelar (RN-10.5b) | backend | 5 | Editar não altera parcelas pagas |
 | S6-06 | Integração: Compromissos e Parcelamentos na API real | frontend | 2 | E2E em staging sem o mock |
 
-
-**Trilha de front (Central de Ajuda e fechamento, contra o mock):**
-
-| ID | Task | Área | Pts | Critério de aceite / testes |
-|---|---|---|---|---|
-| S6-F01 | Central de Ajuda (SSR em `ajuda.arclou.com.br`): início, abas, artigo, busca e feedback | frontend | 5 | Navegação igual ao Figma |
-| S6-F02 | E2E Playwright navegando todas as telas contra o mock + revisão de acessibilidade (WCAG AA) e responsivo | frontend | 3 | Todas as rotas do contrato usadas por alguma tela |
 ## Sprint 7 — Finanças III: metas, simulação e insights (25/01 – 05/02)
 | ID | Task | Área | Pts | Critério de aceite / testes |
 |---|---|---|---|---|

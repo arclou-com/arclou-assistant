@@ -350,6 +350,7 @@ def main() -> None:
     for s in sprints:
         epic_key = f"Sprint {s['n']}"
         epic = issues.get(epic_key)
+        epic_created = not epic
         if not epic:
             pts = sum(t["points"] or 0 for t in s["tasks"])
             body = f"**{s['dates']}** · {pts} pontos\n\n**Objetivo:** {s['objective'] or s['theme']}\n\nAs tasks da sprint são sub-issues desta issue.\n"
@@ -404,12 +405,13 @@ def main() -> None:
                 fields["Sprint"]["id"],
                 {"iterationId": iterations[epic_key]},
             )
-            set_field(
-                proj["id"],
-                item,
-                fields["Status"]["id"],
-                {"singleSelectOptionId": status_opt["Todo" if s["n"] == 0 else "Backlog"]},
-            )
+            if created:  # nunca sobrescreve o andamento de uma issue que já existe
+                set_field(
+                    proj["id"],
+                    item,
+                    fields["Status"]["id"],
+                    {"singleSelectOptionId": status_opt["Todo" if s["n"] == 0 else "Backlog"]},
+                )
             set_field(
                 proj["id"],
                 item,
@@ -436,12 +438,13 @@ def main() -> None:
             fields["Sprint"]["id"],
             {"iterationId": iterations[epic_key]},
         )
-        set_field(
-            proj["id"],
-            item,
-            fields["Status"]["id"],
-            {"singleSelectOptionId": status_opt["Todo" if s["n"] == 0 else "Backlog"]},
-        )
+        if epic_created:
+            set_field(
+                proj["id"],
+                item,
+                fields["Status"]["id"],
+                {"singleSelectOptionId": status_opt["Todo" if s["n"] == 0 else "Backlog"]},
+            )
         print(f"Sprint {s['n']} ok (épico #{epic_num})")
     print(f"Project: https://github.com/orgs/{OWNER}/projects/{proj['number']}")
 
