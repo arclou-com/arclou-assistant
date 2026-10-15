@@ -175,4 +175,3 @@ A TV vai até agosto/2027.
 **Marina:** paguei o mercado no meu cartão, 412,30, é da casa
 **Arclou (modo Misto):** Registrei ✓ Mercado, R$ 412,30, da casa, pago por você. A conjunta te deve R$ 412,30. Quando transferir, me avise para eu registrar o reembolso.
 → RN-11.16
-
