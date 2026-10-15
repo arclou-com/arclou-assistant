@@ -1,0 +1,6 @@
+# Revisor padrão de tudo
+*                 @arclouai
+# Infra, pipelines e contrato exigem o owner
+/infra/           @arclouai
+/.github/         @arclouai
+/api/openapi.yaml @arclouai
