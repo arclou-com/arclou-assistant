@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+.terraform/
+*.tfstate*
+node_modules/
+.next/
+.venv/
+.DS_Store
