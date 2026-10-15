@@ -265,6 +265,7 @@ def main() -> None:
         item = gql("""mutation($p:ID!,$c:ID!){addProjectV2ItemById(input:{projectId:$p,contentId:$c}){item{id}}}""",
                    p=proj["id"], c=epic["id"])["addProjectV2ItemById"]["item"]["id"]
         set_field(proj["id"], item, fields["Sprint"]["id"], {"iterationId": iterations[epic_key]})
+        set_field(proj["id"], item, fields["Status"]["id"], {"singleSelectOptionId": status_opt["Todo" if s["n"] == 0 else "Backlog"]})
         print(f"Sprint {s['n']} ok (épico #{epic_num})")
     print(f"Project: https://github.com/orgs/{OWNER}/projects/{proj['number']}")
 
